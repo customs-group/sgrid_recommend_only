@@ -113,12 +113,13 @@ public class RecommendLib {
     }
 
     /**
-     * recommend a list of solutions according to the input description
-     * @param description the input description of recommend
-     * @param displayBoundary the boundary to display recommend solutions
+     * recommendDebug a list of solutions according to the input description
+     * for debug usage
+     * @param description the input description of recommendDebug
+     * @param displayBoundary the boundary to display recommendDebug solutions
      * @return a list of similar defects and their solutions
      */
-    public List<DefectSimple> recommend(String description, int displayBoundary) {
+    public List<DefectSimple> recommendDebug(String description, int displayBoundary) {
         assert this.defects.size() != 0;
 
         long startTime = System.currentTimeMillis();
@@ -147,12 +148,52 @@ public class RecommendLib {
         for (int i = 0; i < displayBoundary; i++) {
             DefectSimple defect = resultMapList.get(i).getKey();
             resultList.add(defect);
-            System.out.println("recommend solution " + (i + 1) + ", similarity: " + resultMapList.get(i).getValue());
+            System.out.println("recommendDebug solution " + (i + 1) + ", similarity: " + resultMapList.get(i).getValue());
             System.out.println(defect.getDetails().toString());
         }
         long finishTime = System.currentTimeMillis();
         System.out.println("searching done in " + (finishTime - startTime) / 1000.0 + " seconds");
         return resultList;
+    }
+
+    /**
+     * recommendDebug a list of strings containing solutions
+     * according to the input description
+     * @param description the input description of recommendDebug
+     * @param displayBoundary the boundary to display recommendDebug solutions
+     * @return a list of strings containing solutions
+     */
+    public List<String> recommend(String description, int displayBoundary) {
+        assert this.defects.size() != 0;
+
+        List<String> result = new ArrayList<>();
+
+        Document _defectDescription = new Document(description);
+        _defectDescription.countTerms(Util.seperate(_defectDescription.toString()));
+        _defectDescription.calculateTF_IDF(this.defects.size(), this.invertedIndex);
+        _defectDescription.calculateKeyWords(this.keyWordBoundary);
+        _defectDescription.calculateFeatureVector(this.featureTerms);
+        double[] newFeatureVector = _defectDescription.getFeatureVector();
+
+        Map<DefectSimple, Double> defectMap = new HashMap<>();
+        for (DefectSimple oldDefect : this.defects) {
+            double[] oldFeatureVector = oldDefect.getDescription().getFeatureVector();
+            double similarity = 0.0;
+            for (int i = 0; i < newFeatureVector.length; i++) {
+                similarity += newFeatureVector[i] * oldFeatureVector[i];
+            }
+            if (similarity > this.threshold) {
+                defectMap.put(oldDefect, similarity);
+            }
+        }
+        List<Map.Entry<DefectSimple, Double>> resultMapList = new ArrayList<>(defectMap.entrySet());
+        Collections.sort(resultMapList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        for (int i = 0; i < displayBoundary; i++) {
+            DefectSimple defect = resultMapList.get(i).getKey();
+            result.add(defect.getRecommendation());
+        }
+        return result;
     }
 
     /**
