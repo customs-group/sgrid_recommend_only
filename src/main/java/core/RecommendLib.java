@@ -4,6 +4,7 @@ import util.*;
 import core.columnGroups.*;
 
 import java.io.*;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -76,6 +77,50 @@ public class RecommendLib {
         long finishTime = System.currentTimeMillis();
         System.out.println("data reading finished in " + (finishTime - startTime) / 1000.0 + " seconds");
         this.train();
+    }
+
+    /**
+     * init the lib from a DBMS
+     * @param url the url of the DBMS
+     * @param username username
+     * @param password password
+     */
+    public void initFromDB(String url, String username, String password) {
+        try {
+            JDBCUtil jdbcUtil = JDBCUtil.getInstance();
+            jdbcUtil.dbms = JDBCUtil.DBMS.ORACLE;
+            Connection con = jdbcUtil.getConnection(url, username, password);
+
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ...");
+
+            rs.next(); // first line is column names
+            while (rs.next()) {
+                String defectApperance = rs.getString(15);
+                String defectDescription = rs.getString(16);
+                String recommendation = rs.getString(20);
+                Document _defectDescription = new Document(defectDescription);
+
+                Details details = new Details.DetailsBuilder(defectApperance, _defectDescription)
+                        .recommendation(recommendation).createDetails();
+
+                DefectSimple defect = new DefectSimple.Builder().details(details).build();
+                this.defects.add(defect);
+            }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException se) {
+            System.out.println("数据库连接失败！");
+            se.printStackTrace();
+        }
     }
 
     /**

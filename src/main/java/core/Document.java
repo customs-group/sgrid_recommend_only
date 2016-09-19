@@ -1,6 +1,6 @@
 package core;
 
-import util.Util;
+import util.CollectionUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -38,7 +38,7 @@ public class Document implements Serializable {
      */
     public Map<String, Integer> countTerms(List<String> terms) {
         this.termsCount = new HashMap<>();
-        this.termsCount = Util.countList(terms);
+        this.termsCount = CollectionUtil.countList(terms);
         return this.termsCount;
     }
 

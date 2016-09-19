@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  *
@@ -24,45 +23,6 @@ public class Util {
     // Suppress default constructor for noninstantiability
     private Util() {
         throw new AssertionError();
-    }
-
-    //~ Collection methods -----------------------------------------------------
-
-    /**
-     * count the object numbers of a list
-     * @param objectList the input list
-     * @param <T> the type of objects in the list
-     * @return a map contains all object and their counts
-     */
-    public static <T> Map<T, Integer> countList(List<T> objectList) {
-        Map<T, Integer> resultMap = new HashMap<>();
-        objectList.forEach(object -> {
-            int count = resultMap.containsKey(object) ? resultMap.get(object) + 1 : 1;
-            resultMap.put(object, count);
-        });
-        return resultMap;
-    }
-
-    /**
-     *
-     * @param originalMap
-     * @param object
-     * @param <T>
-     * @return
-     */
-    public static <T> Map<T, Integer> updateCountMap(Map<T, Integer> originalMap, T object) {
-        int count = originalMap.containsKey(object) ? originalMap.get(object) + 1 : 1;
-        originalMap.put(object, count);
-        return originalMap;
-    }
-
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValueDesc(Map<K, V> map ) {
-        Map<K, V> result = new LinkedHashMap<>();
-        Stream<Map.Entry<K, V>> st = map.entrySet().stream();
-
-        st.sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).forEachOrdered( e -> result.put(e.getKey(), e.getValue()) );
-
-        return result;
     }
 
     //~ NLP methods ------------------------------------------------------------
