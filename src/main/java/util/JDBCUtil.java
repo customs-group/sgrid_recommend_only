@@ -10,7 +10,6 @@ import java.util.Properties;
  * Created by edwardlol on 16/9/19.
  */
 public class JDBCUtil {
-
     //~ Enum class -------------------------------------------------------------
 
     public enum DBMS {

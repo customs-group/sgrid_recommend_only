@@ -12,7 +12,6 @@ import java.util.*;
  * Created by edwardlol on 16/7/9.
  */
 public class RecommendLib {
-
     //~ Static fields/initializers ---------------------------------------------
 
     private static RecommendLib instance = null;
@@ -50,9 +49,10 @@ public class RecommendLib {
      */
     public void initFromCSVFile(String file) {
         long startTime = System.currentTimeMillis();
-        try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        try (FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
             String line = bufferedReader.readLine(); // first line is column names
             line = bufferedReader.readLine();
             while (line != null) {
@@ -69,8 +69,6 @@ public class RecommendLib {
                 this.defects.add(defect);
                 line = bufferedReader.readLine();
             }
-            bufferedReader.close();
-            fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,13 +84,12 @@ public class RecommendLib {
      * @param password password
      */
     public void initFromDB(String url, String username, String password) {
-        try {
-            JDBCUtil jdbcUtil = JDBCUtil.getInstance();
-            jdbcUtil.dbms = JDBCUtil.DBMS.ORACLE;
-            Connection con = jdbcUtil.getConnection(url, username, password);
-
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ...");
+        JDBCUtil jdbcUtil = JDBCUtil.getInstance();
+        jdbcUtil.dbms = JDBCUtil.DBMS.ORACLE;
+        try (
+             Connection con = jdbcUtil.getConnection(url, username, password);
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM ...")) {
 
             rs.next(); // first line is column names
             while (rs.next()) {
@@ -106,16 +103,6 @@ public class RecommendLib {
 
                 DefectSimple defect = new DefectSimple.Builder().details(details).build();
                 this.defects.add(defect);
-            }
-
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (con != null) {
-                con.close();
             }
         } catch (SQLException se) {
             System.out.println("数据库连接失败！");
