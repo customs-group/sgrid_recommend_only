@@ -1,5 +1,6 @@
 package core;
 
+import com.google.common.collect.Maps;
 import util.CollectionUtil;
 
 import java.io.Serializable;
@@ -49,7 +50,7 @@ public class Document implements Serializable {
      * @return a map of terms and their TF-IDF
      */
     public Map<String, Double> calculateTF_IDF(int docCount, Map<String, Set<Integer>> invertedIndex) {
-        this.termsTF_IDF = new HashMap<>();
+        this.termsTF_IDF = Maps.newHashMap();
         int wordsNum = 0;
         for (int i : this.termsCount.values()) { wordsNum += i; }
 

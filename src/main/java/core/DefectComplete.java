@@ -165,7 +165,7 @@ public class DefectComplete extends DefectBase {
         return this.equipInfo.getName();
     }
     public String getEquipType() {
-        return this.equipInfo.getType();
+        return this.equipInfo.getEquipType();
     }
     public int getVoltage() {
         return this.equipInfo.getVoltage();

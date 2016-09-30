@@ -1,5 +1,7 @@
 package util;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 
@@ -33,7 +35,7 @@ public class Util {
      * @return the list of terms in the sentence
      */
     public static List<String> seperate(String sentence) {
-        List<String> termList = new ArrayList<>();
+        List<String> termList = Lists.newArrayList();
         JiebaSegmenter segmenter = new JiebaSegmenter();
 
         // seperate tokens
@@ -59,10 +61,10 @@ public class Util {
      * @return column number of rows with count
      */
     public static Map<Integer, Integer> checkFormat(String file) {
-        Map<Integer, Integer> lengthMap = new HashMap<>();
-        try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        Map<Integer, Integer> lengthMap = Maps.newHashMap();
+        try (FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
             String line = bufferedReader.readLine();
             String[] contents1 = line.split(",");
             for (int i = 0; i < contents1.length; i++) {
@@ -79,8 +81,6 @@ public class Util {
                 line = bufferedReader.readLine();
             }
             lengthMap.forEach((length, times) -> System.out.println("length: " + length + "; times: " + times));
-            bufferedReader.close();
-            fileReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,13 +1,16 @@
 package core;
 
+import org.junit.Test;
+
 /**
  *
  * Created by edwardlol on 16/8/13.
  */
 public class RecommendDemo {
 
-    public static void main(String[] args) {
 
+    @Test
+    public void recommend() {
         RecommendLib recommendLib = RecommendLib.getInstance();
 
         recommendLib.initFromCSVFile("./datasets/defects/AllDefects.cleared.csv");
@@ -27,6 +30,6 @@ public class RecommendDemo {
 
         // 进行7#母线转检修时，2021617地刀不能电磁解锁。
         recommendLib.recommendDebug("地刀  不能电磁解锁", 2);
-
     }
+
 }

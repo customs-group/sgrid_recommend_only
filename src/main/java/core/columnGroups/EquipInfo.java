@@ -11,7 +11,7 @@ public class EquipInfo implements Serializable {
     //~ Instance fields --------------------------------------------------------
 
     private final String name; // 设备名称
-    private final String type; // 设备类别
+    private final String equipType; // 设备类别
     private final int voltage; // 电压等级
     private final String functionPosition; // 功能位置
     private final String partsName; // 部件名称
@@ -22,9 +22,9 @@ public class EquipInfo implements Serializable {
     /** private constructer
      * use Builder to get an instance of this class
      */
-    private EquipInfo(String name, String type, int voltage, String functionPosition, String partsName, String model) {
+    private EquipInfo(String name, String equipType, int voltage, String functionPosition, String partsName, String model) {
         this.name = name;
-        this.type = type;
+        this.equipType = equipType;
         this.voltage = voltage;
         this.functionPosition = functionPosition;
         this.partsName = partsName;
@@ -36,7 +36,7 @@ public class EquipInfo implements Serializable {
     @Override
     public String toString() {
         return "设备名称: " + this.name
-                + "\n设备类别: " + this.type
+                + "\n设备类别: " + this.equipType
                 + "\n电压等级: " + this.voltage
                 + "\n功能位置: " + this.functionPosition
                 + "\n部件名称: " + this.partsName
@@ -48,8 +48,8 @@ public class EquipInfo implements Serializable {
     public String getName() {
         return this.name;
     }
-    public String getType() {
-        return this.type;
+    public String getEquipType() {
+        return this.equipType;
     }
     public int getVoltage() {
         return this.voltage;
@@ -68,15 +68,15 @@ public class EquipInfo implements Serializable {
 
     public static class EquipInfoBuilder {
         private final String _name; // 设备名称
-        private final String _type; // 设备类别
+        private final String _equipType; // 设备类别
         private final int _voltage; // 电压等级
         private String _functionPosition; // 功能位置
         private String _partsName; // 部件名称
         private String _model; // 设备型号
 
-        public EquipInfoBuilder(String name, String type, int voltage) {
+        public EquipInfoBuilder(String name, String equipType, int voltage) {
             this._name = name;
-            this._type = type;
+            this._equipType = equipType;
             this._voltage = voltage;
         }
         public EquipInfoBuilder functionPosition(String functionPosition) {
@@ -93,7 +93,7 @@ public class EquipInfo implements Serializable {
         }
 
         public EquipInfo createEquipInfo() {
-            return new EquipInfo(_name, _type, _voltage, _functionPosition, _partsName, _model);
+            return new EquipInfo(_name, _equipType, _voltage, _functionPosition, _partsName, _model);
         }
     }
 }

@@ -1,5 +1,7 @@
 package util;
 
+import com.google.common.collect.Maps;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ public class CollectionUtil {
      * @return a map contains all object and their counts
      */
     public static <T> Map<T, Integer> countList(List<T> objectList) {
-        Map<T, Integer> resultMap = new HashMap<>();
+        Map<T, Integer> resultMap = Maps.newHashMap();
         objectList.forEach(object -> {
             int count = resultMap.containsKey(object) ? resultMap.get(object) + 1 : 1;
             resultMap.put(object, count);

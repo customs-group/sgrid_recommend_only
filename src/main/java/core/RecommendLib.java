@@ -1,5 +1,8 @@
 package core;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import util.*;
 import core.columnGroups.*;
 
@@ -18,9 +21,9 @@ public class RecommendLib {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final List<DefectSimple> defects = new ArrayList<>(); // a list of all defects
-    private final Map<String, Set<Integer>> invertedIndex = new HashMap<>(); // inverted index of the corpus
-    private final List<String> featureTerms = new ArrayList<>(); // the terms to make feature vectors
+    private final List<DefectSimple> defects = Lists.newArrayList(); // a list of all defects
+    private final Map<String, Set<Integer>> invertedIndex = Maps.newHashMap(); // inverted index of the corpus
+    private final List<String> featureTerms = Lists.newArrayList(); // the terms to make feature vectors
 
     private double threshold = 0.0d;
     private int keyWordBoundary = 255; // the maximun number of key words of each defect
@@ -123,7 +126,7 @@ public class RecommendLib {
         // calculate the inverted index of the corpus
         for (int i = 0; i < this.defects.size(); i++) {
             for (String term : this.defects.get(i).getDescription().getTermsCount().keySet()) {
-                Set<Integer> indexes = this.invertedIndex.containsKey(term) ? this.invertedIndex.get(term) : new HashSet<>();
+                Set<Integer> indexes = this.invertedIndex.containsKey(term) ? this.invertedIndex.get(term) : Sets.newHashSet();
                 indexes.add(i);
                 this.invertedIndex.put(term, indexes);
             }
@@ -132,7 +135,7 @@ public class RecommendLib {
         this.defects.forEach(defect ->
                 defect.getDescription().calculateTF_IDF(this.defects.size(), this.invertedIndex));
         // calculate the key words of each defect's description
-        Set<String> globalKeyWords = new HashSet<>();
+        Set<String> globalKeyWords = Sets.newHashSet();
         this.defects.forEach(defect ->
                 globalKeyWords.addAll(defect.getDescription().calculateKeyWords(this.keyWordBoundary)));
         this.calculateFeatureTerms(globalKeyWords);
@@ -163,7 +166,7 @@ public class RecommendLib {
         _defectDescription.calculateFeatureVector(this.featureTerms);
 
         double[] newFeatureVector = _defectDescription.getFeatureVector();
-        Map<DefectSimple, Double> defectMap = new HashMap<>();
+        Map<DefectSimple, Double> defectMap = Maps.newHashMap();
         for (DefectSimple oldDefect : this.defects) {
             double[] oldFeatureVector = oldDefect.getDescription().getFeatureVector();
             double similarity = 0.0;
@@ -174,9 +177,10 @@ public class RecommendLib {
                 defectMap.put(oldDefect, similarity);
             }
         }
-        List<Map.Entry<DefectSimple, Double>> resultMapList = new ArrayList<>(defectMap.entrySet());
+
+        List<Map.Entry<DefectSimple, Double>> resultMapList = Lists.newArrayList(defectMap.entrySet());
         Collections.sort(resultMapList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-        List<DefectSimple> resultList = new ArrayList<>();
+        List<DefectSimple> resultList = Lists.newArrayList();
         for (int i = 0; i < displayBoundary; i++) {
             DefectSimple defect = resultMapList.get(i).getKey();
             resultList.add(defect);
@@ -198,7 +202,7 @@ public class RecommendLib {
     public List<String> recommend(String description, int displayBoundary) {
         assert this.defects.size() != 0;
 
-        List<String> result = new ArrayList<>();
+        List<String> result = Lists.newArrayList();
 
         Document _defectDescription = new Document(description);
         _defectDescription.countTerms(Util.seperate(_defectDescription.toString()));
@@ -207,7 +211,7 @@ public class RecommendLib {
         _defectDescription.calculateFeatureVector(this.featureTerms);
         double[] newFeatureVector = _defectDescription.getFeatureVector();
 
-        Map<DefectSimple, Double> defectMap = new HashMap<>();
+        Map<DefectSimple, Double> defectMap = Maps.newHashMap();
         for (DefectSimple oldDefect : this.defects) {
             double[] oldFeatureVector = oldDefect.getDescription().getFeatureVector();
             double similarity = 0.0;
@@ -218,7 +222,7 @@ public class RecommendLib {
                 defectMap.put(oldDefect, similarity);
             }
         }
-        List<Map.Entry<DefectSimple, Double>> resultMapList = new ArrayList<>(defectMap.entrySet());
+        List<Map.Entry<DefectSimple, Double>> resultMapList = Lists.newArrayList(defectMap.entrySet());
         Collections.sort(resultMapList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
         for (int i = 0; i < displayBoundary; i++) {
@@ -234,9 +238,9 @@ public class RecommendLib {
      */
     private void calculateFeatureTerms(Set<String> globalKeyWords) {
         // setup a list of global keywords and their count
-        Map<String, Integer> globalKeyWordsCount = new HashMap<>();
+        Map<String, Integer> globalKeyWordsCount = Maps.newHashMap();
         globalKeyWords.forEach(keyWord -> globalKeyWordsCount.put(keyWord, this.invertedIndex.get(keyWord).size()));
-        List<Map.Entry<String, Integer>> globalKeyWordsCountList = new ArrayList<>(globalKeyWordsCount.entrySet());
+        List<Map.Entry<String, Integer>> globalKeyWordsCountList = Lists.newArrayList(globalKeyWordsCount.entrySet());
         Collections.sort(globalKeyWordsCountList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         // set the boundary of feature terms
         int realBoundary = Math.min(this.featureVectorBoundary, globalKeyWordsCountList.size());
@@ -254,7 +258,7 @@ public class RecommendLib {
      * @return a list of sorted inverted index in descending order
      */
     private List<Map.Entry<String, Set<Integer>>> sortInvertedIndex() {
-        List<Map.Entry<String, Set<Integer>>> invertedIndexList = new ArrayList<>(this.invertedIndex.entrySet());
+        List<Map.Entry<String, Set<Integer>>> invertedIndexList = Lists.newArrayList(this.invertedIndex.entrySet());
         Collections.sort(invertedIndexList, (entry1, entry2) -> {
             if (entry2.getValue().size() == entry1.getValue().size()) {
                 return 0;
