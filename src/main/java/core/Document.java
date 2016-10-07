@@ -1,6 +1,8 @@
 package core;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import util.CollectionUtil;
 
 import java.io.Serializable;
@@ -38,7 +40,7 @@ public class Document implements Serializable {
      * @return a map of terms and their counts
      */
     public Map<String, Integer> countTerms(List<String> terms) {
-        this.termsCount = new HashMap<>();
+        this.termsCount = Maps.newHashMap();
         this.termsCount = CollectionUtil.countList(terms);
         return this.termsCount;
     }
@@ -78,9 +80,9 @@ public class Document implements Serializable {
      * @return a set of key words
      */
     public Set<String> calculateKeyWords(int boundary) {
-        this.keyWords = new HashSet<>();
+        this.keyWords = Sets.newHashSet();
         // sort this.termsTF_IDF
-        List<Map.Entry<String, Double>> termsEntryList = new ArrayList<>(this.termsTF_IDF.entrySet());
+        List<Map.Entry<String, Double>> termsEntryList = Lists.newArrayList(this.termsTF_IDF.entrySet());
         Collections.sort(termsEntryList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         // get top x terms and their TF-IDF
         int realBoundary = Math.min(boundary, termsEntryList.size());
