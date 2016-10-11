@@ -11,7 +11,7 @@ import java.util.Map;
  * the base of all defects containing some basic fields and methods
  * Created by edwardlol on 16/9/14.
  */
-public abstract class DefectBase implements Defect, Serializable {
+abstract class DefectBase implements Defect, Serializable {
 
     //~ Static fields/initializers ---------------------------------------------
 

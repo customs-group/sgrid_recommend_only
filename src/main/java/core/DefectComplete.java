@@ -9,7 +9,7 @@ import core.columnGroups.*;
  *
  * Created by edwardlol on 16/5/25.
  */
-public class DefectComplete extends DefectBase {
+class DefectComplete extends DefectBase {
 
     //~ Instance fields --------------------------------------------------------
 

@@ -148,7 +148,18 @@ public class RecommendLib {
     }
 
     /**
-     * recommendDebug a list of solutions according to the input description
+     * recommend a list contains only one solutions according
+     * to the input description
+     * for debug usage
+     * @param description the input description of recommendDebug
+     * @return a list containing the most similar defect and its solution
+     */
+    public List<DefectSimple> recommendDebug(String description) {
+        return recommendDebug(description, 1);
+    }
+
+    /**
+     * recommend a list of solutions according to the input description
      * for debug usage
      * @param description the input description of recommendDebug
      * @param displayBoundary the boundary to display recommendDebug solutions
@@ -193,7 +204,17 @@ public class RecommendLib {
     }
 
     /**
-     * recommendDebug a list of strings containing solutions
+     * recommend a list containing only one solutions
+     * according to the input description
+     * @param description the input description of recommendDebug
+     * @return a list containing only the most similar defect's solution
+     */
+    public List<String> recommend(String description) {
+        return recommend(description, 1);
+    }
+
+    /**
+     * recommend a list of strings containing solutions
      * according to the input description
      * @param description the input description of recommendDebug
      * @param displayBoundary the boundary to display recommendDebug solutions
