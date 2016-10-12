@@ -126,6 +126,11 @@ public class Document implements Serializable {
         return this.content;
     }
 
+    /**
+     * check the result of word seperation
+     * for debug usage, like making a dictionary of word seperation
+     * @return a String representing the result of word seperation
+     */
     public String checkSep() {
         String result = "";
         for (int i = 0; i < this.terms.size(); i++) {
