@@ -89,8 +89,7 @@ public class RecommendLib {
     public void initFromDB(String url, String username, String password) {
         JDBCUtil jdbcUtil = JDBCUtil.getInstance();
         jdbcUtil.dbms = JDBCUtil.DBMS.ORACLE;
-        try (
-             Connection con = jdbcUtil.getConnection(url, username, password);
+        try (Connection con = jdbcUtil.getConnection(url, username, password);
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM ...")) {
 
