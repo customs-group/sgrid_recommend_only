@@ -172,6 +172,7 @@ public class RecommendLib {
 
         Document _defectDescription = new Document(description);
         _defectDescription.countTerms(Util.seperate(_defectDescription.toString()));
+        System.out.println("seperation result: " + _defectDescription.checkSep());
         _defectDescription.calculateTF_IDF(this.defects.size(), this.invertedIndex);
         _defectDescription.calculateKeyWords(this.keyWordBoundary);
         _defectDescription.calculateFeatureVector(this.featureTerms);

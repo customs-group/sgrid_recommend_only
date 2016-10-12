@@ -21,6 +21,7 @@ public class Document implements Serializable {
     // content of the document
     private String content;
 
+    private List<String> terms;
     private Map<String, Integer> termsCount;
     private Map<String, Double> termsTF_IDF;
     private Set<String> keyWords;
@@ -40,6 +41,7 @@ public class Document implements Serializable {
      * @return a map of terms and their counts
      */
     public Map<String, Integer> countTerms(List<String> terms) {
+        this.terms = Lists.newArrayList(terms);
         this.termsCount = Maps.newHashMap();
         this.termsCount = CollectionUtil.countList(terms);
         return this.termsCount;
@@ -124,8 +126,22 @@ public class Document implements Serializable {
         return this.content;
     }
 
+    public String checkSep() {
+        String result = "";
+        for (int i = 0; i < this.terms.size(); i++) {
+            result += terms.get(i) + " ";
+            if (i < this.terms.size()) {
+                result += " ";
+            }
+        }
+        return result;
+    }
+
     //~ getter methods ---------------------------------------------------------
 
+    public List<String> getTerms() {
+        return this.terms;
+    }
     public Map<String, Integer> getTermsCount() {
         return this.termsCount;
     }

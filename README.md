@@ -38,3 +38,11 @@ copy of sgrid's recommend module
 
 读入的过程中程序会自动对缺陷库进行训练，在训练完成后便可调用recommend方法，传入想要被推荐的缺陷描述，以及所需展示的推荐条目数量（可选，默认为1），便可获得推荐的解决方案列表。
 
+
+
+## 基本原理
+
+http://www.ruanyifeng.com/blog/2013/03/tf-idf.html
+
+http://www.ruanyifeng.com/blog/2013/03/cosine_similarity.html
+
