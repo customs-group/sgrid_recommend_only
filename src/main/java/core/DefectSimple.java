@@ -64,7 +64,6 @@ public class DefectSimple extends DefectBase {
             return new DefectSimple(_details);
         }
     }
-
 }
 
 // End DefectSimple.java

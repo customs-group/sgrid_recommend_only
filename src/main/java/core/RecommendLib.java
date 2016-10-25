@@ -86,6 +86,7 @@ public class RecommendLib {
      * @param username username
      * @param password password
      */
+    @SuppressWarnings("unused")
     public void initFromDB(String url, String username, String password) {
         JDBCUtil jdbcUtil = JDBCUtil.getInstance();
         jdbcUtil.dbms = JDBCUtil.DBMS.ORACLE;
@@ -153,6 +154,7 @@ public class RecommendLib {
      * @param description the input description of recommendDebug
      * @return a list containing the most similar defect and its solution
      */
+    @SuppressWarnings("unused")
     public List<DefectSimple> recommendDebug(String description) {
         return recommendDebug(description, 1);
     }
@@ -192,7 +194,8 @@ public class RecommendLib {
         List<Map.Entry<DefectSimple, Double>> resultMapList = Lists.newArrayList(defectMap.entrySet());
         Collections.sort(resultMapList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         List<DefectSimple> resultList = Lists.newArrayList();
-        for (int i = 0; i < displayBoundary; i++) {
+        int realBoundary = Math.min(displayBoundary, resultMapList.size());
+        for (int i = 0; i < realBoundary; i++) {
             DefectSimple defect = resultMapList.get(i).getKey();
             resultList.add(defect);
             System.out.println("recommendDebug solution " + (i + 1) + ", similarity: " + resultMapList.get(i).getValue());
@@ -209,8 +212,9 @@ public class RecommendLib {
      * @param description the input description of recommendDebug
      * @return a list containing only the most similar defect's solution
      */
+    @SuppressWarnings("unused")
     public List<String> recommend(String description) {
-        return recommend(description, 1);
+        return recommend(description, 1, false);
     }
 
     /**
@@ -218,10 +222,11 @@ public class RecommendLib {
      * according to the input description
      * @param description the input description of recommendDebug
      * @param displayBoundary the boundary to display recommendDebug solutions
+     * @param dedup whether to delete the duplicated output
      * @return a list of strings containing solutions
      */
-    public List<String> recommend(String description, int displayBoundary) {
-        assert this.defects.size() != 0;
+    public List<String> recommend(String description, int displayBoundary, boolean dedup) {
+        assert this.defects.size() != 0 : "recommend lib not properly initialized";
 
         List<String> result = Lists.newArrayList();
 
@@ -246,9 +251,22 @@ public class RecommendLib {
         List<Map.Entry<DefectSimple, Double>> resultMapList = Lists.newArrayList(defectMap.entrySet());
         Collections.sort(resultMapList, (entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
-        for (int i = 0; i < displayBoundary; i++) {
-            DefectSimple defect = resultMapList.get(i).getKey();
-            result.add(defect.getRecommendation());
+        Set<String> dedupSet = Sets.newHashSet();
+        Iterator<Map.Entry<DefectSimple, Double>> iterator = resultMapList.iterator();
+        int i = 0;
+        int realBoundary = Math.min(displayBoundary, resultMapList.size());
+        while (iterator.hasNext() && i < realBoundary) {
+            DefectSimple defect = iterator.next().getKey();
+            if (dedup) {
+                if (!dedupSet.contains(defect.getRecommendation())) {
+                    dedupSet.add(defect.getRecommendation());
+                    result.add(defect.getRecommendation());
+                    i++;
+                }
+            } else {
+                result.add(defect.getRecommendation());
+                i++;
+            }
         }
         return result;
     }
@@ -278,6 +296,7 @@ public class RecommendLib {
      * articles containing the term
      * @return a list of sorted inverted index in descending order
      */
+    @SuppressWarnings("unused")
     private List<Map.Entry<String, Set<Integer>>> sortInvertedIndex() {
         List<Map.Entry<String, Set<Integer>>> invertedIndexList = Lists.newArrayList(this.invertedIndex.entrySet());
         Collections.sort(invertedIndexList, (entry1, entry2) -> {

@@ -87,7 +87,7 @@ public class JDBCUtil {
      * @param username username
      * @param password password
      * @return the connection of the DBMS
-     * @throws SQLException
+     * @throws SQLException get connection error
      */
     public Connection getConnection(String url, String username, String password) throws SQLException {
         Connection conn = null;

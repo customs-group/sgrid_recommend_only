@@ -9,6 +9,7 @@ import core.columnGroups.*;
  *
  * Created by edwardlol on 16/5/25.
  */
+@SuppressWarnings("unused")
 class DefectComplete extends DefectBase {
 
     //~ Instance fields --------------------------------------------------------
@@ -231,8 +232,6 @@ class DefectComplete extends DefectBase {
             return new DefectComplete(_overview, _details, _dateInfo, _equipInfo, _belongingInfo);
         }
     }
-
-
 }
 
 // End DefectComplete.java

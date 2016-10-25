@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * the base of all defects containing some basic fields and methods
@@ -18,7 +16,7 @@ abstract class DefectBase implements Defect, Serializable {
     /**
      * a static dict that maps fields name to their real name
      */
-    static final ImmutableMap<String, String> fieldDict = ImmutableMap.<String, String>builder()
+    private static final ImmutableMap<String, String> fieldDict = ImmutableMap.<String, String>builder()
             .put("level", "严重等级")
             .put("defectType", "缺陷类别")
             .put("defectClass", "缺陷种类")
@@ -56,6 +54,7 @@ abstract class DefectBase implements Defect, Serializable {
      * @param name the field name
      * @return the real name
      */
+    @SuppressWarnings("unused")
     public static String getName(String name) {
         return fieldDict.get(name);
     }
@@ -65,6 +64,7 @@ abstract class DefectBase implements Defect, Serializable {
      * @param fieldName field name
      * @return the String content
      */
+    @SuppressWarnings("unused")
     public String getField(String fieldName) {
         String methodName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
         try {

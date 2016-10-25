@@ -52,7 +52,6 @@ public class Util {
         return termList;
     }
 
-
     //~ IO methods -------------------------------------------------------------
 
     /**
@@ -60,6 +59,7 @@ public class Util {
      * @param file file name
      * @return column number of rows with count
      */
+    @SuppressWarnings("unused")
     public static Map<Integer, Integer> checkFormat(String file) {
         Map<Integer, Integer> lengthMap = Maps.newHashMap();
         try (FileReader fileReader = new FileReader(file);
@@ -104,6 +104,7 @@ public class Util {
      * @param date2 the earlier Date
      * @return the days between date1 and date2
      */
+    @SuppressWarnings("unused")
     public static int getIntervalDays(Date date1, Date date2) {
         return new Long((date1.getTime() - date2.getTime()) / 1000 / 60 / 60 / 24).intValue();
     }
@@ -118,6 +119,7 @@ public class Util {
         return new Long((date1.getTimeInMillis() - date2.getTimeInMillis()) / 1000 / 60 / 60 / 24).intValue();
     }
 
+    @SuppressWarnings("unused")
     public static int getIntervalHours(Date date1, Date date2) {
         return new Long((date1.getTime() - date2.getTime()) / 1000 / 60 / 60).intValue();
     }
@@ -165,6 +167,9 @@ public class Util {
      * @param string the input String
      * @return a Calendar instance
      */
+
+    @org.jetbrains.annotations.Nullable
+    @SuppressWarnings("unused")
     public static Calendar stringToCalendar(String string) {
         Calendar calendar = Calendar.getInstance();
         Date date = stringToDate(string);
